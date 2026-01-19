@@ -1,0 +1,30 @@
+name: Daily Lottery AI
+
+on:
+  schedule:
+    # 每天 UTC 时间 1:00 运行 (即北京时间 9:00)
+    - cron: '0 1 * * *'
+  workflow_dispatch: # 允许手动点按钮测试
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install google-generativeai requests
+
+      - name: Run AI Analysis
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+        run: python main.py
