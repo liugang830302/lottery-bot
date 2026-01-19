@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 # 读取保密配置
 API_KEY = os.environ.get("GEMINI_API_KEY")
-SC_KEY = os.environ.get("SERVERCHAN_KEY") # 改用 Server酱 Key
+SC_KEY = os.environ.get("SERVERCHAN_KEY")
 
 # 设置时区 (北京时间 UTC+8)
 def get_beijing_time():
@@ -36,7 +36,7 @@ def send_to_serverchan(title, content):
     url = f"https://sctapi.ftqq.com/{SC_KEY}.send"
     data = {
         "title": title,
-        "desp": content # Server酱的内容字段叫 desp
+        "desp": content
     }
     try:
         response = requests.post(url, data=data)
@@ -45,7 +45,7 @@ def send_to_serverchan(title, content):
         print(f"!!! 推送失败: {e}")
 
 def run_task():
-    print(">>> 开始执行自动分析任务 (Server酱版)...")
+    print(">>> 开始执行自动分析任务 (Server酱版/Gemini-Pro)...")
     
     command, lottery_name = check_draw_day()
     if not command:
@@ -57,7 +57,8 @@ def run_task():
     # 1. 调用 Gemini
     try:
         genai.configure(api_key=API_KEY)
-        model = genai.GenerativeModel('gemini-1.5-flash') 
+        # 修复点：改用最稳定的 gemini-pro
+        model = genai.GenerativeModel('gemini-pro') 
         
         prompt = f"""
         你现在是资深数据分析师。请执行指令：“{command}”。
