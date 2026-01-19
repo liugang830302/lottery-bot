@@ -25,6 +25,7 @@ jobs:
 
       - name: Run AI Analysis
         env:
+          # 这里把 Secrets 传给 Python
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+          SERVERCHAN_KEY: ${{ secrets.SERVERCHAN_KEY }}
         run: python main.py
